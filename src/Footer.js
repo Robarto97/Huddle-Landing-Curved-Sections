@@ -2,15 +2,25 @@ import phone from "./images/icon-phone.svg";
 import email from "./images/icon-email.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faFacebookF,
   faFacebookSquare,
   faInstagram,
-  faInstagramSquare,
-  faSquareInstagram,
-  faTwitter,
   faTwitterSquare,
 } from "@fortawesome/free-brands-svg-icons";
+import { useRef, useState } from "react";
+
 const Footer = () => {
+  const inputRef = useRef();
+  const [isError, setIsError] = useState(false);
+  const handleClick = () => {
+    const currValue = inputRef.current.value;
+    const regex = /^\w+([.-_]?\w+)*@\w+([.]?\w+)*(.\w{2,3})+$/g;
+    if (currValue === "" || currValue === null || !currValue.match(regex)) {
+      setIsError(true);
+    } else {
+      setIsError(false);
+      inputRef.current.value = "";
+    }
+  };
   return (
     <footer>
       <div className="content">
@@ -21,8 +31,15 @@ const Footer = () => {
             newsletter. We'll never send you spam or pass on your email address
           </p>
           <div className="form-group">
-            <input type="text" />
-            <button>Subscribe</button>
+            <input
+              className={` ${isError ? "wrong" : ""}`}
+              ref={inputRef}
+              type="text"
+            />
+            <button onClick={handleClick}>Subscribe</button>
+            <p className={`error ${isError ? "show" : ""}`}>
+              Check your email please
+            </p>
           </div>
         </div>
         <div className="contacts">
